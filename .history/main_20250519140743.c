@@ -160,7 +160,7 @@ void printList( struct gList *currentPtr ) {
 }
 
 int main(void) {
-    char *text, *text1, *text2, *line;
+    char *text, *text1;
     struct gList tmp, *head = NULL;
     int i, len, j;
     FILE *file;
@@ -264,13 +264,8 @@ int main(void) {
                 exit(1);
             }
 
-            // for(i=12;i<len-1;i++){
-            //     strncat(text2,&text[i],1);
-            // }
-            text2[0] = '\0';
-
-            for(i = 12; i < len; i++) {
-                strncat(text2, &text[i], 1);
+            for(i=12;i<len-1;i++){
+                strncat(text2,&text[i],1);
             }
             printf("%s\n", text2);
 
