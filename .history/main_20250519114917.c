@@ -9,7 +9,7 @@ void learn(int i, char *g1);
 void already_know(int i, char *g1);
 struct gList *insert(struct gList *sPtr, struct gList g);
 int search(struct gList *sPtr, char *con);
-void printList( struct gList *currentPtr );
+
 typedef struct gList {
   char *concept; // the concept learned
   char *sentence; // the sentence associated with the concept
@@ -31,8 +31,8 @@ void learn(int i, char *g1)
         fprintf(file1,"Wow! First time I learn something about %s!\n",g1);
     }
     else if (i==3) {
-        printf("Learning about %s was very interesting! (no it wasn't, I was just being polite)\n",g1);
-        fprintf(file1,"Learning about %s was very interesting! (no it wasn't, I was just being polite)\n",g1);
+        printf("Learning about %s was very interesting! (no it wasn’t, I was just being polite)\n",g1);
+        fprintf(file1,"Learning about %s was very interesting! (no it wasn’t, I was just being polite)\n",g1);
     }
     else if (i==4) {
         printf("%s sounds interesting! Glad to have learned about it...\n",g1);
@@ -142,64 +142,23 @@ int search(struct gList *currentPtr, char *con) {
     return 0;
 }
 
-void printList( struct gList *currentPtr ) {
-    if ( currentPtr == NULL )
-        printf( "List is empty.\n\n" );
-    else {
-        printf( "The list is:\n" );
-        //printf( "NULL <-->" );
-        while ( currentPtr != NULL ) {
-            printf( "%s\n", currentPtr->concept );
-            printf( "%s\n", currentPtr->sentence );
-            printf( "%d\n", currentPtr->timesUsed );
-            printf( "%s\n\n", currentPtr->learnedFrom );
-            currentPtr = currentPtr->next;
-        }
-        //printf( "NULL\n\n" );
-    }
-}
-
 int main(void) {
     char *text, *text1;
     struct gList tmp, *head = NULL;
     int i, len, j;
-    FILE *file;
-
-    srand(time(NULL));
-
-    text = (char*) malloc(sizeof(char) * 10000);
-    if(text == NULL) {
-        printf("No memory available!!!\n");
-        exit(1);
-    }
-
-    text1 = (char*) malloc(sizeof(char) * 100);
-    if(text1 == NULL) {
-        printf("No memory available!!!\n");
-        exit(1);
-    }
-
-    file1 = fopen("dialogue.txt", "w");
-    if (file1 == NULL) {
-        printf("File dialogue.txt cannot be opened!!!\n");
-    }
 
     while(1) {
         printf("\033[1;30mme$ \033[0m");
         fgets(text,10000,stdin);
-        text[strcspn(text, "\n")] = '\0';  
 
         fprintf(file1,"me$ ");
 
         len = strlen(text);
         //printf("%d\n",len);
 
-        // for(i=0;i<13;i++) { //12
-        //     strncat(text1,&text[i],1);
-        // }
-        strncpy(text1, text, 13);
-        text1[13] = '\0';
-
+        for(i=0;i<13;i++){ //12
+            strncat(text1,&text[i],1);
+        }
         //printf("%s\n", text1);
         fprintf(file1,"%s",text);
     
@@ -228,8 +187,6 @@ int main(void) {
             if ( tmp.sentence == NULL ) {
                 exit(EXIT_FAILURE);
             }
-            
-            tmp.sentence[0] = '\0';
 
             // printf("J: %d\n",j);
 

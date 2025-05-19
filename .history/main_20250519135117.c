@@ -187,12 +187,12 @@ int main(void) {
     while(1) {
         printf("\033[1;30mme$ \033[0m");
         fgets(text,10000,stdin);
-        text[strcspn(text, "\n")] = '\0';  
+        text[strcspn(text, "\n")] = '\0';  // Αφαιρεί το newline στο τέλος
 
         fprintf(file1,"me$ ");
 
         len = strlen(text);
-        //printf("%d\n",len);
+        printf("%d\n",len);
 
         // for(i=0;i<13;i++) { //12
         //     strncat(text1,&text[i],1);
@@ -200,7 +200,7 @@ int main(void) {
         strncpy(text1, text, 13);
         text1[13] = '\0';
 
-        //printf("%s\n", text1);
+        printf("%s\n", text1);
         fprintf(file1,"%s",text);
     
         if(strncmp(text1,"learn this > ",12) == 0) {
