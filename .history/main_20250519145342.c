@@ -177,39 +177,40 @@ struct gList *insert(struct gList *sPtr, struct gList g) {
     return sPtr;
 }
 
-int delete1(struct gList **sPtr, struct gList g) {
-    struct gList *previousPtr, *currentPtr, *tempPtr;
+int delete1(struct gList **sPtr, struct gList g)
+{
+   struct gList *previousPtr, *currentPtr, *tempPtr;
 
-    if(my_strcasestr(g.concept,(*sPtr)->concept)!=0) {
-        tempPtr = *sPtr;
-        *sPtr = (*sPtr)->next;  /* de-thread the node */
-        if (*sPtr != NULL) {
-            (*sPtr)->prev = NULL;
-        }
-        free(tempPtr);             /* free the de-threaded node */
-        return 1;
-    }
-    else {
-        previousPtr = NULL; // *sPtr;
-        currentPtr = (*sPtr); //->next;
+   if(my_strcasestr(g.concept,(*sPtr)->concept)!=0) {
+      tempPtr = *sPtr;
+      *sPtr = (*sPtr)->next;  /* de-thread the node */
+      if (*sPtr != NULL) {
+         (*sPtr)->prev = NULL;
+      }
+     free(tempPtr);             /* free the de-threaded node */
+      return 1;
+   }
+   else {
+      previousPtr = NULL; // *sPtr;
+      currentPtr = (*sPtr); //->next;
 
-        while ( (currentPtr != NULL) && (my_strcasestr(currentPtr->concept,g.concept) == 0 ) ) { //!=
-            previousPtr = currentPtr;          /* walk to ...   */
-            currentPtr = currentPtr->next;  /* ... next node */
-        }
+      while ( (currentPtr != NULL) && (my_strcasestr(currentPtr->concept,g.concept) == 0 ) ) { //!=
+         previousPtr = currentPtr;          /* walk to ...   */
+         currentPtr = currentPtr->next;  /* ... next node */
+      }
 
-        if ( (currentPtr != NULL) && (my_strcasestr(currentPtr->concept,g.concept) != 0 ) ) {
-            tempPtr = currentPtr;
-            previousPtr->next = currentPtr->next;
-            if (currentPtr->next != NULL) {
-                currentPtr->next->prev = previousPtr;
-            }
-            free(tempPtr);
-            return 1;
-        }
-    }
+      if ( (currentPtr != NULL) && (my_strcasestr(currentPtr->concept,g.concept) != 0 ) ) {
+         tempPtr = currentPtr;
+         previousPtr->next = currentPtr->next;
+         if (currentPtr->next != NULL) {
+            currentPtr->next->prev = previousPtr;
+         }
+         free(tempPtr);
+         return 1;
+      }
+   }
 
-    return 0;
+   return 0;
 }
 
 int search(struct gList *currentPtr, char *con) {
@@ -269,11 +270,12 @@ void printList( struct gList *currentPtr ) {
 }
 
 char *my_strcasestr(const char *text, const char *word) {
-    if (!*word) return (char *)text;  
+    if (!*word) return (char *)text;  // Αν το word είναι κενό, επιστρέφουμε την αρχή του text
 
     size_t word_len = strlen(word);
 
     for (; *text; ++text) {
+        // Αν το υπόλοιπο text είναι μικρότερο από το word, σταματάμε
         if (strlen(text) < word_len)
             return NULL;
 
@@ -283,11 +285,11 @@ char *my_strcasestr(const char *text, const char *word) {
                 break;
         }
 
-        if (i == word_len) 
+        if (i == word_len) // Αν βρήκαμε όλη τη λέξη
             return (char *)text;
     }
 
-    return NULL; 
+    return NULL; // Δεν βρέθηκε
 }
 
 int main(void) {
@@ -465,31 +467,31 @@ int main(void) {
             if( (text[i] != ',') && (text[i] != '.') ) {
                 strncat(tmp.concept,&text[i],1);
             }
-            else if( (text[i] == ',') || (text[i] == '.') ) {
+            else if(text[i] == ',') {
 
-                tmp.concept[strcspn(tmp.concept,"\n")]='\0';
+            tmp.concept[strcspn(tmp.concept,"\n")]='\0';
 
-                if(search1(head,tmp.concept) != NULL) { //Found 
-                    printf("\033[1;30mChatGTP$ \033[0m");
-                    k = rand() % 5 + 1;
-                    delete_term(k,search1(head,tmp.concept));
-                    delete1(&head,tmp);
-                    printList(head);
-                    i++;
-                    strcpy(tmp.concept, "");
-                }
-                else if(search1(head,tmp.concept) == NULL) { //Not found
-                    printf("\033[1;30mChatGTP$ \033[0m");
-                    k = rand() % 5 + 1;
-                    not_delete(k,tmp.concept);
-                    delete1(&head,tmp);
-                    printList(head);
-                    i++;
-                    strcpy(tmp.concept, "");
-                }
+            if(search1(head,tmp.concept) != NULL) { //Found 
+                printf("\033[1;30mChatGTP$ \033[0m");
+                k = rand() % 5 + 1;
+                delete_term(k,search1(head,tmp.concept));
+                delete1(&head,tmp);
+                printList(head);
+                i++;
+                strcpy(tmp.concept, "");
+            }
+            else if(search1(head,tmp.concept) == NULL) { //Not found
+                printf("\033[1;30mChatGTP$ \033[0m");
+                k = rand() % 5 + 1;
+                not_delete(k,tmp.concept);
+                delete1(&head,tmp);
+                printList(head);
+                i++;
+                strcpy(tmp.concept, "");
+            }
             } //end else if
         }
         }
-    }
-    return 0;    
+    return 0;
+    }    
 }

@@ -2,20 +2,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <ctype.h>
 
 FILE *file1;
 
 void learn(int i, char *g1);
 void already_know(int i, char *g1);
-void delete_term(int i, char *g1);
-void not_delete(int i, char *g1);
 struct gList *insert(struct gList *sPtr, struct gList g);
-int delete1(struct gList **sPtr, struct gList g);
 int search(struct gList *sPtr, char *con);
-char *search1(struct gList *currentPtr, char *con);
 void printList( struct gList *currentPtr );
-char *my_strcasestr(const char *text, const char *word);
 typedef struct gList {
   char *concept; // the concept learned
   char *sentence; // the sentence associated with the concept
@@ -74,54 +68,6 @@ void already_know(int i, char *g1) {
     }
 }
 
-void delete_term(int i, char *g1) {
-    fprintf(file1,"ChatGTP$ ");
-    if(i==1) {
-        printf("%s turned out to be useless, so I forgot it :)\n",g1);
-        fprintf(file1,"%s turned out to be useless, so I forgot it :)\n",g1);
-    }
-    else if (i==2) {
-        printf("%s proved to be pointless, so it slipped right out of my mind.\n",g1);
-        fprintf(file1,"%s proved to be pointless, so it slipped right out of my mind.\n",g1);
-    }
-    else if (i==3) {
-        printf("%s ended up being a useless skill, so I erased it from my memory.\n",g1);
-        fprintf(file1,"%s ended up being a useless skill, so I erased it from my memory.\n",g1);
-    }
-    else if (i==4) {
-        printf("I found no use for %s, so I promptly forgot all about it.\n",g1);
-        fprintf(file1,"I found no use for %s, so I promptly forgot all about it.\n",g1);
-    }
-    else if (i==5) {
-        printf("%s proved to be of no practical value, so I quickly let it fade away from my memory.\n",g1);
-        fprintf(file1,"%s proved to be of no practical value, so I quickly let it fade away from my memory.\n",g1);
-    }
-}
-
-void not_delete(int i, char *g1) {
-    fprintf(file1,"ChatGTP$ ");
-    if(i==1) {
-        printf("What is %s? I cannot forget something I don't know!\n",g1);
-        fprintf(file1,"What is %s? I cannot forget something I don't know!\n",g1);
-    }
-    else if (i==2) {
-        printf("Who is %s? I can't remember something I've never learned about!\n",g1);
-        fprintf(file1,"Who is %s? I can't remember something I've never learned about!\n",g1);
-    }
-    else if (i==3) {
-        printf("Can you tell me about %s? It's hard to forget something when I have no knowledge of it.\n",g1);
-        fprintf(file1,"Can you tell me about %s? It's hard to forget something when I have no knowledge of it.\n",g1);
-    }
-    else if (i==4) {
-        printf("What can you tell me about %s? It's difficult to forget something when I don't have any information about it.\n",g1);
-        fprintf(file1,"What can you tell me about %s? It's difficult to forget something when I don't have any information about it.\n",g1);
-    }
-    else if (i==5) {
-        printf("I'm curious about %s. It's impossible to forget something I've never been aware of!\n",g1);
-        fprintf(file1,"I'm curious about %s. It's impossible to forget something I've never been aware of!\n",g1);
-    }
-}
-
 struct gList *insert(struct gList *sPtr, struct gList g) {
 
  struct gList *new, *previousPtr, *currentPtr;
@@ -177,41 +123,6 @@ struct gList *insert(struct gList *sPtr, struct gList g) {
     return sPtr;
 }
 
-int delete1(struct gList **sPtr, struct gList g) {
-    struct gList *previousPtr, *currentPtr, *tempPtr;
-
-    if(my_strcasestr(g.concept,(*sPtr)->concept)!=0) {
-        tempPtr = *sPtr;
-        *sPtr = (*sPtr)->next;  /* de-thread the node */
-        if (*sPtr != NULL) {
-            (*sPtr)->prev = NULL;
-        }
-        free(tempPtr);             /* free the de-threaded node */
-        return 1;
-    }
-    else {
-        previousPtr = NULL; // *sPtr;
-        currentPtr = (*sPtr); //->next;
-
-        while ( (currentPtr != NULL) && (my_strcasestr(currentPtr->concept,g.concept) == 0 ) ) { //!=
-            previousPtr = currentPtr;          /* walk to ...   */
-            currentPtr = currentPtr->next;  /* ... next node */
-        }
-
-        if ( (currentPtr != NULL) && (my_strcasestr(currentPtr->concept,g.concept) != 0 ) ) {
-            tempPtr = currentPtr;
-            previousPtr->next = currentPtr->next;
-            if (currentPtr->next != NULL) {
-                currentPtr->next->prev = previousPtr;
-            }
-            free(tempPtr);
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
 int search(struct gList *currentPtr, char *con) {
 
     if(currentPtr == NULL)
@@ -231,26 +142,6 @@ int search(struct gList *currentPtr, char *con) {
     return 0;
 }
 
-char *search1(struct gList *currentPtr, char *con) {
-
-    if(currentPtr == NULL)
-        return NULL;
-
-    while (currentPtr != NULL) {
-        if(my_strcasestr(currentPtr->concept,con) != 0) {
-        //if(strcasestr(currentPtr->concept,con) != 0) {
-            return currentPtr->concept;
-        }
-        if (strcmp(currentPtr->concept,con)>0) {
-            currentPtr = currentPtr->prev;
-        }
-        else {
-            currentPtr = currentPtr->next;
-        }
-    }
-    return NULL;
-}
-
 void printList( struct gList *currentPtr ) {
     if ( currentPtr == NULL )
         printf( "List is empty.\n\n" );
@@ -266,28 +157,6 @@ void printList( struct gList *currentPtr ) {
         }
         //printf( "NULL\n\n" );
     }
-}
-
-char *my_strcasestr(const char *text, const char *word) {
-    if (!*word) return (char *)text;  
-
-    size_t word_len = strlen(word);
-
-    for (; *text; ++text) {
-        if (strlen(text) < word_len)
-            return NULL;
-
-        size_t i;
-        for (i = 0; i < word_len; ++i) {
-            if (tolower((unsigned char)text[i]) != tolower((unsigned char)word[i]))
-                break;
-        }
-
-        if (i == word_len) 
-            return (char *)text;
-    }
-
-    return NULL; 
 }
 
 int main(void) {
@@ -465,31 +334,31 @@ int main(void) {
             if( (text[i] != ',') && (text[i] != '.') ) {
                 strncat(tmp.concept,&text[i],1);
             }
-            else if( (text[i] == ',') || (text[i] == '.') ) {
+            else if(text[i] == ',') {
 
-                tmp.concept[strcspn(tmp.concept,"\n")]='\0';
+            tmp.concept[strcspn(tmp.concept,"\n")]='\0';
 
-                if(search1(head,tmp.concept) != NULL) { //Found 
-                    printf("\033[1;30mChatGTP$ \033[0m");
-                    k = rand() % 5 + 1;
-                    delete_term(k,search1(head,tmp.concept));
-                    delete1(&head,tmp);
-                    printList(head);
-                    i++;
-                    strcpy(tmp.concept, "");
-                }
-                else if(search1(head,tmp.concept) == NULL) { //Not found
-                    printf("\033[1;30mChatGTP$ \033[0m");
-                    k = rand() % 5 + 1;
-                    not_delete(k,tmp.concept);
-                    delete1(&head,tmp);
-                    printList(head);
-                    i++;
-                    strcpy(tmp.concept, "");
-                }
+            if(search1(head,tmp.concept) != NULL) { //Found 
+                printf("\033[1;30mChatGTP$ \033[0m");
+                k = rand() % 5 + 1;
+                delete_term(k,search1(head,tmp.concept));
+                delete1(&head,tmp);
+                printList(head);
+                i++;
+                strcpy(tmp.concept, "");
+            }
+            else if(search1(head,tmp.concept) == NULL) { //Not found
+                printf("\033[1;30mChatGTP$ \033[0m");
+                k = rand() % 5 + 1;
+                not_delete(k,tmp.concept);
+                delete1(&head,tmp);
+                printList(head);
+                i++;
+                strcpy(tmp.concept, "");
+            }
             } //end else if
         }
         }
-    }
-    return 0;    
+    return 0;
+    }    
 }
