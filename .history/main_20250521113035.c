@@ -426,7 +426,7 @@ int main(void) {
         fprintf(file1,"me$ ");
 
         len = strlen(text);
-        //printf("%d\n",len);
+        printf("%d\n",len);
 
         // for(i=0;i<13;i++) { //12
         //     strncat(text1,&text[i],1);

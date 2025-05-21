@@ -18,8 +18,6 @@ int search(struct gList *sPtr, char *con);
 char *search1(struct gList *currentPtr, char *con);
 char *search2(struct gList *currentPtr, char *con);
 void printList( struct gList *currentPtr );
-void printConcept( struct gList *currentPtr );
-void times_Used( struct gList *currentPtr );
 char *my_strcasestr(const char *text, const char *word);
 typedef struct gList {
   char *concept; // the concept learned
@@ -341,36 +339,6 @@ void printList( struct gList *currentPtr ) {
     }
 }
 
-void printConcept( struct gList *currentPtr ) {
-    if ( currentPtr == NULL )
-        printf( "I don't know any Concept(s).\n" );
-    else {
-        printf( "The Concept(s) i know is:\n" );
-        while ( (currentPtr != NULL) ) {
-            printf( "%s\n", currentPtr->concept );
-            printf("%d\n", currentPtr->timesUsed);
-            fprintf(file1, "%s\n", currentPtr->concept );
-            fprintf(file1, "%d\n", currentPtr->timesUsed );
-            currentPtr = currentPtr->next;
-        }
-    }    
-}
-
-void times_Used( struct gList *currentPtr ) {
-    if ( currentPtr == NULL )
-        printf( "No one Concept has timesUsed higher than 0.\n" );
-    else {
-        printf( "The Concept(s) which has timesUsed higher than 0 is:\n" );
-        while ( currentPtr != NULL ) {
-            if(currentPtr->timesUsed >0) {
-                printf( "%s\n", currentPtr->concept );
-                fprintf(file1, "%s\n", currentPtr->concept );
-            }
-            currentPtr = currentPtr->next;
-        }
-    }
-}
-
 char *my_strcasestr(const char *text, const char *word) {
     if (!*word) return (char *)text;  
 
@@ -426,7 +394,7 @@ int main(void) {
         fprintf(file1,"me$ ");
 
         len = strlen(text);
-        //printf("%d\n",len);
+        printf("%d\n",len);
 
         // for(i=0;i<13;i++) { //12
         //     strncat(text1,&text[i],1);
