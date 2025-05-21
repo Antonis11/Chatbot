@@ -404,6 +404,8 @@ int main(void) {
 
         //printf("%s\n", text1);
         fprintf(file1,"%s",text);
+    
+        printf("%c\n",text[len-1]);
 
         if(strncmp(text1,"learn this > ",12) == 0) {
 

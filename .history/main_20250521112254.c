@@ -404,6 +404,8 @@ int main(void) {
 
         //printf("%s\n", text1);
         fprintf(file1,"%s",text);
+    
+        printf("%c\n",text[len-1]);
 
         if(strncmp(text1,"learn this > ",12) == 0) {
 
@@ -561,14 +563,14 @@ int main(void) {
             } //end else if
         }
         }
-        else if( (text[len-1] == '.') ){
+        else if( (text[len-2] == '.') ){
             printf("\033[1;30mChatGTP$ \033[0m");
             i = rand() % 5 + 1;
             general_answer(i);
             strcpy(text, "");
             strcpy(text1, "");
         }
-        else if(text[len-1] == '?') {
+        else if(text[len-2] == '?') {
 
             tmp.concept = (char*) malloc (sizeof(char) * 100);
             if ( tmp.concept == NULL ) {

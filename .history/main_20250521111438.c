@@ -16,7 +16,6 @@ struct gList *insert(struct gList *sPtr, struct gList g);
 int delete1(struct gList **sPtr, struct gList g);
 int search(struct gList *sPtr, char *con);
 char *search1(struct gList *currentPtr, char *con);
-char *search2(struct gList *currentPtr, char *con);
 void printList( struct gList *currentPtr );
 char *my_strcasestr(const char *text, const char *word);
 typedef struct gList {
@@ -302,26 +301,6 @@ char *search1(struct gList *currentPtr, char *con) {
     return NULL;
 }
 
-char *search2(struct gList *currentPtr, char *con) {
-
-    if(currentPtr == NULL)
-        return NULL;
-
-    while (currentPtr != NULL) {
-        if(my_strcasestr(currentPtr->concept,con) != 0) { //==0
-            currentPtr->timesUsed +=1;
-            return currentPtr->sentence;
-        }
-        if (strcmp(currentPtr->concept,con)>0) {
-            currentPtr = currentPtr->prev;
-        }
-        else {
-            currentPtr = currentPtr->next;
-        }
-    }
-    return NULL;
-}
-
 void printList( struct gList *currentPtr ) {
     if ( currentPtr == NULL )
         printf( "List is empty.\n\n" );
@@ -394,7 +373,7 @@ int main(void) {
         fprintf(file1,"me$ ");
 
         len = strlen(text);
-        printf("%d\n",len);
+        //printf("%d\n",len);
 
         // for(i=0;i<13;i++) { //12
         //     strncat(text1,&text[i],1);
@@ -404,7 +383,7 @@ int main(void) {
 
         //printf("%s\n", text1);
         fprintf(file1,"%s",text);
-
+    
         if(strncmp(text1,"learn this > ",12) == 0) {
 
             tmp.timesUsed=0;
@@ -561,14 +540,14 @@ int main(void) {
             } //end else if
         }
         }
-        else if( (text[len-1] == '.') ){
+        else if( (text[len-2]== '.') ){
             printf("\033[1;30mChatGTP$ \033[0m");
             i = rand() % 5 + 1;
             general_answer(i);
             strcpy(text, "");
             strcpy(text1, "");
         }
-        else if(text[len-1] == '?') {
+        else if(text[len-2]== '?') {
 
             tmp.concept = (char*) malloc (sizeof(char) * 100);
             if ( tmp.concept == NULL ) {
